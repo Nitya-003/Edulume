@@ -174,7 +174,7 @@ export class CertificateGenerator {
     this.doc.setTextColor(45, 45, 45);
     this.doc.setFontSize(12);
     this.doc.setFont("times", "bold");
-    this.doc.text("Tarin Agarwal", this.pageWidth - 70, footerY + 18, {
+    this.doc.text("Krishna Mutthu", this.pageWidth - 70, footerY + 18, {
       align: "center",
     });
     this.doc.setTextColor(45, 45, 45);
