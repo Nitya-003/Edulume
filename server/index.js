@@ -125,13 +125,6 @@ app.get("/api/health", async (req, res) => {
       allowedOrigins: getAllowedOrigins(),
       database: "Connected",
       userCount,
-      envVars: {
-        DATABASE_URL: process.env.DATABASE_URL ? "SET" : "NOT SET",
-        JWT_SECRET: process.env.JWT_SECRET ? "SET" : "NOT SET",
-        GROQ_API_KEY: process.env.GROQ_API_KEY ? "SET" : "NOT SET",
-        PYTHON_API_URL: process.env.PYTHON_API_URL ? "SET" : "NOT SET",
-        CLIENT_ORIGIN: process.env.CLIENT_ORIGIN ? "SET" : "NOT SET",
-      },
     });
   } catch (error) {
     console.error("Health check failed:", error);
