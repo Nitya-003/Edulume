@@ -83,7 +83,10 @@ const CreateDiscussionPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await submitDiscussionAction();
+  };
 
+  const submitDiscussionAction = async () => {
     if (!title.trim() || !content.trim() || !category) {
       setError("Please fill in all required fields");
       return;
@@ -186,6 +189,12 @@ const CreateDiscussionPage: React.FC = () => {
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                onKeyDown={(e) => {
+                  if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !loading) {
+                    e.preventDefault();
+                    submitDiscussionAction();
+                  }
+                }}
                 className="alien-input w-full h-40 resize-none"
                 placeholder="Provide more details about your question. Include what you've tried, what you expect, and any relevant context..."
                 required
@@ -317,23 +326,28 @@ const CreateDiscussionPage: React.FC = () => {
             )}
 
             {/* Submit Button */}
-            <div className="flex justify-end space-x-4">
-              <button
-                type="button"
-                onClick={() => navigate("/discussions")}
-                className="px-6 py-3 border border-smoke-light text-gray-400 rounded-lg hover:border-alien-green hover:text-alien-green transition-all duration-300"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={
-                  loading || !title.trim() || !content.trim() || !category
-                }
-                className="alien-button px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? "Creating..." : "Post Question"}
-              </button>
+            <div className="flex justify-between items-center">
+              <p className="text-xs text-gray-500">
+                Tip: Press <kbd className="px-1.5 py-0.5 text-xs bg-smoke-light rounded border border-smoke-dark">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 text-xs bg-smoke-light rounded border border-smoke-dark">Enter</kbd> to post
+              </p>
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  onClick={() => navigate("/discussions")}
+                  className="px-6 py-3 border border-smoke-light text-gray-400 rounded-lg hover:border-alien-green hover:text-alien-green transition-all duration-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={
+                    loading || !title.trim() || !content.trim() || !category
+                  }
+                  className="alien-button px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? "Creating..." : "Post Question"}
+                </button>
+              </div>
             </div>
           </form>
         </div>

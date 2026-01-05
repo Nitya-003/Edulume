@@ -24,6 +24,10 @@ const CreateCoursePage: React.FC = () => {
 
   const handleGenerateOutline = async (e: React.FormEvent) => {
     e.preventDefault();
+    await generateOutlineAction();
+  };
+
+  const generateOutlineAction = async () => {
     if (!topic.trim()) return;
 
     setIsGenerating(true);
@@ -187,10 +191,19 @@ const CreateCoursePage: React.FC = () => {
                   id="topic"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
+                  onKeyDown={(e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !isGenerating) {
+                      e.preventDefault();
+                      generateOutlineAction();
+                    }
+                  }}
                   placeholder="e.g., React.js for Beginners, Digital Marketing Fundamentals, Python Data Science..."
                   className="w-full px-4 py-3 bg-royal-black border border-smoke-light rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-alien-green focus:ring-1 focus:ring-alien-green"
                   required
                 />
+                <p className="text-xs text-gray-500 mt-2">
+                  Tip: Press <kbd className="px-1.5 py-0.5 text-xs bg-smoke-light rounded border border-smoke-dark">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 text-xs bg-smoke-light rounded border border-smoke-dark">Enter</kbd> to generate
+                </p>
               </div>
 
               <div className="text-center">
@@ -254,6 +267,12 @@ const CreateCoursePage: React.FC = () => {
                   onChange={(e) =>
                     setOutline({ ...outline, description: e.target.value })
                   }
+                  onKeyDown={(e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                      e.preventDefault();
+                      setStep(3);
+                    }
+                  }}
                   rows={3}
                   className="w-full px-4 py-3 bg-royal-black border border-smoke-light rounded-lg text-white focus:outline-none focus:border-alien-green focus:ring-1 focus:ring-alien-green resize-none"
                 />

@@ -385,7 +385,10 @@ const DiscussionDetailPage: React.FC = () => {
 
   const handleSubmitReply = async (e: React.FormEvent) => {
     e.preventDefault();
+    await submitReplyAction();
+  };
 
+  const submitReplyAction = async () => {
     if (!currentUser || !replyingTo) {
       return;
     }
@@ -413,6 +416,9 @@ const DiscussionDetailPage: React.FC = () => {
       console.log("✅ Reply submitted successfully");
       // Reset form
       handleCancelReply();
+      
+      // Refresh the discussion to show the new reply
+      await fetchDiscussion();
     } catch (err: any) {
       console.error("❌ Reply submission failed:", err);
       setError(err.response?.data?.error || "Failed to submit reply");
@@ -423,7 +429,10 @@ const DiscussionDetailPage: React.FC = () => {
 
   const handleSubmitAnswer = async (e: React.FormEvent) => {
     e.preventDefault();
+    await submitAnswerAction();
+  };
 
+  const submitAnswerAction = async () => {
     if (!currentUser) {
       navigate("/auth");
       return;
@@ -449,6 +458,9 @@ const DiscussionDetailPage: React.FC = () => {
       // Reset form
       setAnswerContent("");
       setAnswerImages([]);
+      
+      // Refresh the discussion to show the new answer
+      await fetchDiscussion();
     } catch (err: any) {
       console.error("❌ Answer submission failed:", err);
       setError(err.response?.data?.error || "Failed to submit answer");
@@ -768,6 +780,12 @@ const DiscussionDetailPage: React.FC = () => {
                   placeholder="Write your answer..."
                   className="alien-input w-full h-32 resize-none"
                   rows={6}
+                  onKeyDown={(e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !submittingAnswer) {
+                      e.preventDefault();
+                      submitAnswerAction();
+                    }
+                  }}
                 />
 
                 {/* Image Upload */}
@@ -821,7 +839,10 @@ const DiscussionDetailPage: React.FC = () => {
                   </div>
                 )}
 
-                <div className="flex justify-end">
+                <div className="flex justify-between items-center">
+                  <p className="text-xs text-gray-500">
+                    Tip: Press <kbd className="px-1.5 py-0.5 text-xs bg-smoke-light rounded border border-smoke-dark">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 text-xs bg-smoke-light rounded border border-smoke-dark">Enter</kbd> to submit
+                  </p>
                   <button
                     type="submit"
                     disabled={!answerContent.trim() || submittingAnswer}
@@ -1091,6 +1112,12 @@ const DiscussionDetailPage: React.FC = () => {
                                 className="alien-input w-full h-20 resize-none"
                                 rows={3}
                                 replyToUsername={replyToUsername}
+                                onKeyDown={(e) => {
+                                  if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !submittingReply) {
+                                    e.preventDefault();
+                                    submitReplyAction();
+                                  }
+                                }}
                               />
 
                               {/* Image Upload for Reply */}
@@ -1128,25 +1155,30 @@ const DiscussionDetailPage: React.FC = () => {
                                 </div>
 
                                 {/* Form Actions */}
-                                <div className="flex items-center space-x-2">
-                                  <button
-                                    type="button"
-                                    onClick={handleCancelReply}
-                                    className="px-3 py-2 text-sm text-gray-400 hover:text-gray-300 transition-colors duration-300"
-                                  >
-                                    Cancel
-                                  </button>
-                                  <button
-                                    type="submit"
-                                    disabled={
-                                      !replyContent.trim() || submittingReply
-                                    }
-                                    className="px-4 py-2 bg-alien-green text-black text-sm font-medium rounded hover:bg-alien-green/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                                  >
-                                    {submittingReply
-                                      ? "Posting..."
-                                      : "Post Reply"}
-                                  </button>
+                                <div className="flex flex-col space-y-2">
+                                  <p className="text-xs text-gray-500">
+                                    Tip: Press <kbd className="px-1.5 py-0.5 text-xs bg-smoke-light rounded border border-smoke-dark">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 text-xs bg-smoke-light rounded border border-smoke-dark">Enter</kbd> to submit
+                                  </p>
+                                  <div className="flex items-center space-x-2 justify-end">
+                                    <button
+                                      type="button"
+                                      onClick={handleCancelReply}
+                                      className="px-3 py-2 text-sm text-gray-400 hover:text-gray-300 transition-colors duration-300"
+                                    >
+                                      Cancel
+                                    </button>
+                                    <button
+                                      type="submit"
+                                      disabled={
+                                        !replyContent.trim() || submittingReply
+                                      }
+                                      className="px-4 py-2 bg-alien-green text-black text-sm font-medium rounded hover:bg-alien-green/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                                    >
+                                      {submittingReply
+                                        ? "Posting..."
+                                        : "Post Reply"}
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
 

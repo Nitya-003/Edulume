@@ -8,6 +8,7 @@ interface MentionInputProps {
   className?: string;
   rows?: number;
   replyToUsername?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
 const MentionInput: React.FC<MentionInputProps> = ({
@@ -17,6 +18,7 @@ const MentionInput: React.FC<MentionInputProps> = ({
   className,
   rows = 4,
   replyToUsername,
+  onKeyDown,
 }) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -69,6 +71,9 @@ const MentionInput: React.FC<MentionInputProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Forward to parent first so parent can handle global shortcuts (Ctrl/Cmd+Enter)
+    onKeyDown?.(e);
+    
     if (showSuggestions && suggestions.length > 0) {
       switch (e.key) {
         case "ArrowDown":
