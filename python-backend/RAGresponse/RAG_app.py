@@ -37,7 +37,7 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small", openai_api_key=ope
 # Groq client for chat
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-def pinecone_retriver(query, session_id=None):
+def pinecone_retriever(query, session_id=None):
     try:
         vector_store = PineconeVectorStore(index=index, embedding=embeddings)
 
@@ -182,7 +182,7 @@ Remember: Answer ONLY based on the document context above. If the information is
 def main(query, chat_history, session_id=None):
     try:
         # Retrieve FRESH context for THIS specific query
-        content_list = pinecone_retriver(query, session_id)
+        content_list = pinecone_retriever(query, session_id)
         
         if not content_list:
             logger.warning("No relevant content found in vector store")
