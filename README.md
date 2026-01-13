@@ -8,11 +8,42 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](CONTRIBUTING.md)
 
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.18-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.116-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-5.22-2D3748?style=flat-square&logo=prisma&logoColor=white)](https://www.prisma.io/)
+
 **A comprehensive full-stack educational platform combining resource sharing, interactive discussions, AI-powered learning, and structured course/roadmap creation.**
 
 [Live Demo](https://edulume.site) • [Report Bug](https://github.com/tarinagarwal/edulume/issues/new) • [Request Feature](https://github.com/tarinagarwal/edulume/issues/new)
 
 </div>
+
+---
+
+## 🌟 Features
+
+### Core Features
+
+- **User Authentication** - Local signup/login with OTP verification + Google OAuth
+- **Resource Sharing** - Upload and browse PDFs/ebooks by semester, course, department
+- **Discussion Forum** - Community Q&A with voting, best answers, and @mentions
+- **Courses** - Create structured courses with AI-generated content and progress tracking
+- **Roadmaps** - Generate learning roadmaps with resources, tools, and career guidance
+- **AI PDF Chatbot** - Chat with uploaded PDFs using RAG (Retrieval-Augmented Generation)
+- **Admin Panel** - Manage users, content, feature suggestions, and bug reports
+
+### Advanced Features
+
+- **Real-time Updates** - WebSocket support for live notifications
+- **AI Content Generation** - Groq-powered course outlines and chapter content
+- **Vector Database** - Pinecone integration for semantic PDF search
+- **Caching** - Redis caching for improved performance
+- **Email Notifications** - OTP and notification emails via SMTP
+- **File Storage** - Cloudinary and R2 (Backblaze) integration
+- **SEO Optimization** - Sitemap generation and metadata
 
 ---
 
@@ -58,11 +89,19 @@ New to the project? Use this table to find issues that match your specific skill
 | **🧠 AI/Data** | Python, FastAPI, RAG | Prompt tuning, LangChain flow improvements, Vector DB logic |
 | **📝 Docs/DevOps** | Markdown, Docker | Improving setup scripts, writing test cases, Mermaid.js diagrams |
 
+
+
 ---
 
 ## 🚀 Quick Start (Anti-Fatigue Setup)
 
 Edulume is a large monorepo. To avoid "Configuration Fatigue," we recommend starting with a **Lite Setup** unless you are specifically working on AI features.
+
+### Prerequisites
+- Node.js v20.12.2+
+- Python 3.11+
+- MongoDB (local or Atlas)
+- Git
 
 ### 🧩 The "Mock Mode" Strategy
 Don't have all 10+ API keys (Groq, Pinecone, OpenAI, etc.)? **You can still contribute!**
@@ -104,6 +143,20 @@ uvicorn main:app --reload
 
 ---
 
+## 🔌 API Overview
+
+| Module          | Endpoints                      | Description                               |
+| --------------- | ------------------------------ | ----------------------------------------- |
+| **Auth**        | `/api/auth/*`                  | Signup, login, OAuth, OTP, password reset |
+| **Resources**   | `/api/pdfs/*`, `/api/ebooks/*` | PDF and ebook management                  |
+| **Discussions** | `/api/discussions/*`           | Forum with voting and notifications       |
+| **Courses**     | `/api/courses/*`               | Course creation, enrollment, progress     |
+| **Roadmaps**    | `/api/roadmaps/*`              | Learning roadmap generation               |
+| **Feedback**    | `/api/feedback/*`              | Feature suggestions and bug reports       |
+| **AI Chat**     | `/api/pdf-chat/*`              | RAG-based PDF chatbot                     |
+
+---
+
 ## 📊 Database Schema
 We use **Prisma** with **MongoDB** to maintain structured relationships and ensure data integrity. Understanding these models is essential for any backend-related contributions.
 
@@ -117,6 +170,35 @@ erDiagram
     PDF ||--o{ USER : "uploaded_by"
     USER ||--o{ NOTIFICATION : "receives"
 ```
+
+### 📊 Database Models
+
+| Model                        | Description                 |
+| ---------------------------- | --------------------------- |
+| User                         | Authentication and profiles |
+| Discussion, Answer, Reply    | Forum system                |
+| Course, Chapter, Enrollment  | Course management           |
+| Roadmap, RoadmapBookmark     | Learning paths              |
+| Pdf, Ebook                   | Resource storage            |
+| Notification                 | Real-time alerts            |
+| FeatureSuggestion, BugReport | Feedback system             |
+
+---
+
+## 🔐 Environment Variables
+
+Key environment variables needed:
+
+| Variable                  | Description               |
+| ------------------------- | ------------------------- |
+| `DATABASE_URL`            | MongoDB connection string |
+| `JWT_SECRET`              | JWT signing secret        |
+| `GROQ_API_KEY`            | Groq API for AI features  |
+| `OPENAI_API_KEY`          | OpenAI for embeddings     |
+| `PINECONE_API_KEY`        | Pinecone vector database  |
+| `GOOGLE_CLIENT_ID/SECRET` | Google OAuth credentials  |
+
+📖 **See [INSTALLATION.md](INSTALLATION.md) for complete environment setup**
 
 ---
 
